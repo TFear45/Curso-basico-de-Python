@@ -1,8 +1,8 @@
 name: Botón de Pánico - Limpieza de Pruebas
 on:
   schedule:
-    - cron: '0 0 * * *' # Medianoche
-  workflow_dispatch:      # Permite el botón manual
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   limpieza:
@@ -13,30 +13,24 @@ jobs:
       - name: Checkout del Repositorio
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Trae todo el historial
+          fetch-depth: 0
 
-      - name: Configurar Bot
+      - name: Operación Limpieza
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-     - name: Operación Limpieza
-        run: |
-          # 1. Configurar identidad (por si acaso)
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # 2. Traer TODA la información de las ramas de la nube
+          # 1. Traer todo de la nube
           git fetch origin
           
-          # 3. Forzar el cambio a la rama de pruebas (creándola si no existe en el contenedor)
-          git checkout Main-Pruebas || git checkout -b Main-Pruebas
+          # 2. Saltamos a la rama de pruebas (usando minúsculas)
+          git checkout main-pruebas || git checkout -b main-pruebas
           
-          # 4. Resetear al estado de Main
-          git reset --hard origin/Main
+          # 3. Resetear usando la rama 'main' como fuente
+          git reset --hard origin/main
           
-          # 5. Limpiar archivos basura
+          # 4. Limpiar basura
           git clean -fd
           
-          # 6. Subir a la fuerza para limpiar la web
-          git push origin Main-Pruebas --force
+          # 5. Subir cambios
+          git push origin main-pruebas --force
