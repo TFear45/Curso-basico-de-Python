@@ -20,19 +20,23 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Operación Limpieza
+     - name: Operación Limpieza
         run: |
-          # 1. Asegurarnos de estar en la rama de pruebas
-          git checkout Main-Pruebas
+          # 1. Configurar identidad (por si acaso)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 2. Traer TODA la información de las ramas de la nube
+          git fetch origin
           
-          # 2. Traer lo más nuevo de Main (la versión oficial)
-          git fetch origin Main
+          # 3. Forzar el cambio a la rama de pruebas (creándola si no existe en el contenedor)
+          git checkout Main-Pruebas || git checkout -b Main-Pruebas
           
-          # 3. Forzar a que la rama de pruebas sea IGUAL a Main
+          # 4. Resetear al estado de Main
           git reset --hard origin/Main
           
-          # 4. Eliminar archivos creados por alumnos
+          # 5. Limpiar archivos basura
           git clean -fd
           
-          # 5. ¡SUBIR A LA FUERZA! (Esto limpia la nube)
+          # 6. Subir a la fuerza para limpiar la web
           git push origin Main-Pruebas --force
