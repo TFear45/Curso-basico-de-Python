@@ -1,0 +1,35 @@
+name: Reset Diario del Repositorio
+on:
+  schedule:
+    - cron: '0 0 * * *' 
+  workflow_dispatch:      
+
+jobs:
+  limpieza:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+
+      - name: Configurar identidad del Bot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Resetear a la versión maestra
+        run: |
+          # 1. Traer la última versión limpia de la nube
+          git fetch origin main
+          
+          # 2. Forzar a que la rama actual sea IDÉNTICA a la versión limpia
+          git reset --hard origin/main
+          
+          # 3. Borrar archivos que no deberían estar ahí (basura)
+          git clean -fd
+          
+          # 4. Subir los cambios "a la fuerza" para limpiar la nube
+          git push origin main --force
