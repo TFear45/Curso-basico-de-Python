@@ -1,35 +1,38 @@
-name: Reset Diario del Repositorio
+name: Botón de Pánico - Limpieza de Pruebas
 on:
   schedule:
-    - cron: '0 0 * * *' 
-  workflow_dispatch:      
+    - cron: '0 0 * * *' # Medianoche
+  workflow_dispatch:      # Permite el botón manual
 
 jobs:
   limpieza:
     runs-on: ubuntu-latest
     permissions:
-      contents: write     
+      contents: write
     steps:
-      - name: Clonar repositorio
+      - name: Checkout del Repositorio
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
+          fetch-depth: 0 # Trae todo el historial
 
-      - name: Configurar identidad del Bot
+      - name: Configurar Bot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Resetear a la versión maestra
+      - name: Operación Limpieza
         run: |
-          # 1. Traer la última versión limpia de la nube
-          git fetch origin main
+          # 1. Asegurarnos de estar en la rama de pruebas
+          git checkout Main-Pruebas
           
-          # 2. Forzar a que la rama actual sea IDÉNTICA a la versión limpia
-          git reset --hard origin/main
+          # 2. Traer lo más nuevo de Main (la versión oficial)
+          git fetch origin Main
           
-          # 3. Borrar archivos que no deberían estar ahí (basura)
+          # 3. Forzar a que la rama de pruebas sea IGUAL a Main
+          git reset --hard origin/Main
+          
+          # 4. Eliminar archivos creados por alumnos
           git clean -fd
           
-          # 4. Subir los cambios "a la fuerza" para limpiar la nube
-          git push origin main --force
+          # 5. ¡SUBIR A LA FUERZA! (Esto limpia la nube)
+          git push origin Main-Pruebas --force
