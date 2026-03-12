@@ -58,10 +58,10 @@ code .
 
 ---
 
-## 📄 Licencia
+## 📄 Licencia y Uso
+Este proyecto tiene fines estrictamente educativos. Siéntete libre de clonarlo, estudiarlo y compartirlo.
 
-Este proyecto está disponible con fines educativos. Siéntete libre de usarlo y compartirlo.
-
+🤖 Dato curioso: Tenemos un "bot de limpieza" que restablece todo el código cada 24 horas. Así nos aseguramos de que el curso siempre esté impecable para el siguiente estudiante. ¡No te asustes si tus cambios desaparecen en la nube, siempre los tendrás a salvo en tu copia local!
 ---
 
 <p align="center">Hecho con ❤️ para la comunidad de habla hispana que aprende Python</p>
